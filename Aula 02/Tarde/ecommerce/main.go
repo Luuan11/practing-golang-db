@@ -67,7 +67,7 @@ func (p produto) CalcularCusto() (float64, error){
 	case Grande:
 		return p.precoProduto * 1.6 + 2500.00 ,nil
 	default:
-		return 0 , errors.New("Valor incorreto")
+		return 0 , errors.New("valor incorreto")
 	}
 }
 func main(){
