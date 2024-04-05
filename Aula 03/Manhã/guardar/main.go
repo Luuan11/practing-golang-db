@@ -16,7 +16,7 @@ func guardarArquivo(produto []produto, fileName string) {
 	valores = append(valores, "ID,PRECO,QUANTIDADE\n"...)
 
 	for _, produtoItem := range produto{
-		valores = append(valores, fmt.Sprintf(" %d , %2.f , %d\n" , produtoItem.id, produtoItem.preco, produtoItem.qtd)...)
+		valores = append(valores, fmt.Sprintf("%d,%2.f,%d\n" , produtoItem.id, produtoItem.preco, produtoItem.qtd)...)
 	}
 
 	err := os.WriteFile(fileName+".csv", valores, 0644)
