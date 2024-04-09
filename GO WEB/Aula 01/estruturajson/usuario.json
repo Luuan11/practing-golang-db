@@ -1,0 +1,12 @@
+{
+    "products": {
+        "id": 1,
+        "nome": "Luan",
+        "sobrenome": "Chaves",
+        "email": "luan.fschaves@mercadolivre.com",
+        "idade": 21,
+        "altura": 170,
+        "ativo": true,
+        "dataCriacao": "18-03-2024"
+    }
+}
