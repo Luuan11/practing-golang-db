@@ -6,9 +6,9 @@ import (
 )
 
 type user struct {
-	id          int
-	nome        string
-	sobrenome   string
+	Id          int
+	Nome        string
+	Sobrenome   string
 	email       string
 	idade       int
 	altura      float64
@@ -35,7 +35,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("ID:", user.id)
-    fmt.Println("Nome:", user.nome)
-    fmt.Println("Sobrenome:", user.sobrenome)
+	fmt.Println("ID:", user.Id)
+    fmt.Println("Nome:", user.Nome)
+    fmt.Println("Sobrenome:", user.Sobrenome)
 }
