@@ -9,11 +9,11 @@ type user struct {
 	Id          int
 	Nome        string
 	Sobrenome   string
-	email       string
-	idade       int
-	altura      float64
-	ativo       bool
-	dataCriacao string
+	Email       string
+	Idade       int
+	Altura      float64
+	Ativo       bool
+	DataCriacao string
 }
 
 func main() {
