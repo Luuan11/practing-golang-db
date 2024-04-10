@@ -29,7 +29,7 @@ func NewUser(u users.Service) *UserHandler{
 	}
 }
 
-func (c * User)GetAll() gin.HandlerFunc{
+func (c * UserHandler)GetAll() gin.HandlerFunc{
 	return func(ctx *gin.Context){
 		token := ctx.Request.Header.Get("token")
 			if token != "123456"{
@@ -51,4 +51,30 @@ func (c * User)GetAll() gin.HandlerFunc{
 				ctx.Status(http.StatusNoContent)
 			}
 		}
+}
+
+func (c *UserHandler) Store() gin.HandlerFunc{
+	return func(ctx *gin.Context) {
+		token := ctx.GetHeader("token")
+		if token != "123456" {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "token invalido"})
+			return
+		}
+		var req request
+		if err := ctx.Bind(&req); err != nil {
+			ctx.JSON(http.StatusUnprocessableEntity, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		// fmt.Println(req.Name, req.Sobrenome, req.Email, req.Age, req.Status, req.Status, req.DateCreation)
+		u, err := c.service.Store(req.Name, req.Sobrenome, req.Email, req.Age, req.Status, req.Status, req.DateCreation)
+		if err != nil {
+			ctx.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusCreated, u)	
+	}
 }
