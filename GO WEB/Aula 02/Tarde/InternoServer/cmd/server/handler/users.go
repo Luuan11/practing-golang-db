@@ -9,7 +9,6 @@ import (
 
 //implementando request
 type request struct{
-	ID 				int		    `json:"id"`
 	Name 			string   	`json:"name"`
 	Sobrenome		string		`json:"lastname"`
 	Email			string		`json:"email"`
@@ -17,19 +16,18 @@ type request struct{
 	Status 			int	  		`json:"status"`
 	DateCreation 	string 		`json:"dateCreation"`
 }
-
 //estrutura controller
-type UserHandler struct{
+type User struct{
 	service users.Service
 }
 
-func NewUser(u users.Service) *UserHandler{
-	return &UserHandler{
+func NewUser(u users.Service) *User{
+	return &User{
 		service: u,
 	}
 }
 
-func (c * UserHandler)GetAll() gin.HandlerFunc{
+func (c * User)GetAll() gin.HandlerFunc{
 	return func(ctx *gin.Context){
 		token := ctx.Request.Header.Get("token")
 			if token != "123456"{
@@ -53,7 +51,7 @@ func (c * UserHandler)GetAll() gin.HandlerFunc{
 		}
 }
 
-func (c *UserHandler) Store() gin.HandlerFunc{
+func (c *User) Store() gin.HandlerFunc{
 	return func(ctx *gin.Context) {
 		token := ctx.GetHeader("token")
 		if token != "123456" {
@@ -69,7 +67,7 @@ func (c *UserHandler) Store() gin.HandlerFunc{
 		}
 
 		// fmt.Println(req.Name, req.Sobrenome, req.Email, req.Age, req.Status, req.Status, req.DateCreation)
-		u, err := c.service.Store(req.Name, req.Sobrenome, req.Email, req.Age, req.Status, req.Status, req.DateCreation)
+		u, err := c.service.Store(req.Name, req.Sobrenome, req.Email, req.Age, req.Status, req.DateCreation)
 		if err != nil {
 			ctx.JSON(http.StatusNotFound, gin.H{
 				"error": err.Error()})

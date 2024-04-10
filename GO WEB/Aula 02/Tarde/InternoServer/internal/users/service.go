@@ -1,19 +1,13 @@
-package RepositoryService
+package users
 
 //estrutura Service
 type Service interface {
 	GetAll() ([]User, error)
-	Store(Id int, Nome, Sobrenome, Email string, Age, Status int, DateCreation string) (User, error)
+	Store(Nome, Sobrenome, Email string, Age, Status int, DateCreation string) (User, error)
 }
 
 type service struct{
 	repository Repository
-}
-
-func NewService(r Repository) Service{
-	return &service{
-		repository: r,
-	}
 }
 
 //metodo GetAll
@@ -26,7 +20,7 @@ func (s *service)GetAll() ([]User, error){
 }
 
 //Metodo store
-func (s *service) Store(Id int, Nome, Sobrenome, Email string, Age, Status int, DateCreation string)(User, error){
+func (s *service) Store(Nome, Sobrenome, Email string, Age, Status int, DateCreation string)(User, error){
 	lastID, err := s.repository.lastID()
 	if err != nil {
 		return User{}, err
@@ -40,4 +34,10 @@ func (s *service) Store(Id int, Nome, Sobrenome, Email string, Age, Status int, 
 	}
 
 	return user, nil
+}
+
+func NewService(r Repository) Service{
+	return &service{
+		repository: r,
+	}
 }
