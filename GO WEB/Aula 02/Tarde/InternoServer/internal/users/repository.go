@@ -6,7 +6,7 @@ type User struct{
 	Sobrenome		string		`json:"lastname"`
 	Email			string		`json:"email"`
 	Age 			int	    	`json:"age"`
-	Status 			int	  		`json:"status"`
+	Status 			bool 		`json:"status"`
 	DateCreation 	string 		`json:"dateCreation"`
 }
 
@@ -16,7 +16,7 @@ var lastID int
 //estrutura do repository
 type Repository interface{
 	GetAll() ([]User, error)
-	Store(Id int, Nome, Sobrenome, Email string, Age, Status int, DateCreation string) (User, error)
+	Store(Id int, Nome, Sobrenome, Email string, Age int, Status bool, DateCreation string) (User, error)
 	lastID()(int, error)
 }
 
@@ -31,7 +31,7 @@ func (r *repository) GetAll() ([]User, error){
 	return psUser , nil
 }
 
-func (r *repository)Store(Id int, Nome, Sobrenome, Email string, Age, Status int, DateCreation string) (User, error) {
+func (r *repository)Store(Id int, Nome, Sobrenome, Email string, Age int, Status bool, DateCreation string) (User, error) {
 	p := User{Id, Nome, Sobrenome, Email, Age, Status, DateCreation}
 	psUser = append(psUser, p)
 	lastID = p.ID

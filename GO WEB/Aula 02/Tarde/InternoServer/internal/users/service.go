@@ -3,7 +3,7 @@ package users
 //estrutura Service
 type Service interface {
 	GetAll() ([]User, error)
-	Store(Nome, Sobrenome, Email string, Age, Status int, DateCreation string) (User, error)
+	Store(Nome, Sobrenome, Email string, Age int, Status bool, DateCreation string) (User, error)
 }
 
 type service struct{
@@ -20,7 +20,7 @@ func (s *service)GetAll() ([]User, error){
 }
 
 //Metodo store
-func (s *service) Store(Nome, Sobrenome, Email string, Age, Status int, DateCreation string)(User, error){
+func (s *service) Store(Nome, Sobrenome, Email string, Age int, Status bool, DateCreation string)(User, error) {
 	lastID, err := s.repository.lastID()
 	if err != nil {
 		return User{}, err

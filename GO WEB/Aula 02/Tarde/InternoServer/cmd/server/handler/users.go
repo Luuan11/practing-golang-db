@@ -13,7 +13,7 @@ type request struct{
 	Sobrenome		string		`json:"lastname"`
 	Email			string		`json:"email"`
 	Age 			int	    	`json:"age"`
-	Status 			int	  		`json:"status"`
+	Status 			bool	  		`json:"status"`
 	DateCreation 	string 		`json:"dateCreation"`
 }
 //estrutura controller
@@ -27,7 +27,7 @@ func NewUser(u users.Service) *User{
 	}
 }
 
-func (c * User)GetAll() gin.HandlerFunc{
+func (c *User)GetAll() gin.HandlerFunc{
 	return func(ctx *gin.Context){
 		token := ctx.Request.Header.Get("token")
 			if token != "123456"{
@@ -47,7 +47,10 @@ func (c * User)GetAll() gin.HandlerFunc{
 
 			if len(u) == 0{
 				ctx.Status(http.StatusNoContent)
-			}
+			} 
+
+			ctx.JSON(http.StatusOK, u)
+
 		}
 }
 

@@ -16,7 +16,6 @@ func main(){
 	u := server.Group("/users")
 	u.POST("/", userHandler.Store())
 	u.GET("/", userHandler.GetAll())
-	u.GET("/:id", userHandler.GetAll())
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
