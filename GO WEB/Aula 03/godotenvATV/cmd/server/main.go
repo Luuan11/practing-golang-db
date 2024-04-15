@@ -37,11 +37,10 @@ func main(){
 		log.Fatal("error loading .env file", err)
 	}
 
-	db := storeUser.NewFileStore("file", "users.json")
-
 	user := os.Getenv("MY_USER")
 	password := os.Getenv("MY_PASS")
-
+	
+	db := storeUser.NewFileStore("file", "users.json")
 	fmt.Println("user", user, "pass", password)
 
 	repo := users.NewRepository(db)
@@ -55,9 +54,9 @@ func main(){
 	server.Use(LoggerMiddleware)
 
 	u.Use(TokenMiddleware)
-	u.PUT("/:productId", userHandler.Update())
-	u.PATCH("/:productId", userHandler.UpdateName())
-	u.DELETE("/:productId", userHandler.Delete())
+	u.PUT("/:usersId", userHandler.Update())
+	u.PATCH("/:usersId", userHandler.UpdateName())
+	u.DELETE("/:usersId", userHandler.Delete())
 
 	server.Run()
 
