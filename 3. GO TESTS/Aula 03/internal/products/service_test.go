@@ -3,6 +3,7 @@ package products
 import (
 	"encoding/json"
 	"errors"
+
 	"testing"
 
 	"github.com/luuan11/middleProducts/internal/entities"
@@ -161,5 +162,32 @@ func TestDbUpdate(t *testing.T) {
 }
 
 func TestDbDelete(t *testing.T) {
+	testProduct := []entities.Product{}
 
+	dataJson, _ := json.Marshal(testProduct)
+	_ = json.Unmarshal(dataJson, &testProduct)
+	dbMock := store.Mock{
+		Data: dataJson,
+	}
+
+	storeMock := store.FileStoreMock{
+		FileName: "",
+		Mock:     &dbMock,
+	}
+
+	expectedResult := entities.Product{
+		ID: 1,
+		Name: "mouse",
+		Category: "tech",
+		Count: 20,
+		Price: 100,
+	}
+
+	repo := NewRepository(&storeMock)
+	serv := NewService(repo)
+
+	pdc, _ := serv.Store(expectedResult.Name, expectedResult.Category, expectedResult.Count, expectedResult.Price)
+
+	expectedResult.Name = pdc.Name
+	assert.Equal(t, expectedResult, pdc)
 }

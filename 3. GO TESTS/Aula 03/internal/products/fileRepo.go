@@ -59,6 +59,28 @@ func (r *FileRepository) Store(name, category string, count int, price float64) 
 }
 
 func (r *FileRepository) Delete(id uint64) error {
+	deleted := false
+	var index int
+
+	var pd []entities.Product
+	if err := r.db.Read(&pd); err != nil {
+		return err
+	}
+
+	for i := range pd {
+		if pd[i].ID == id {
+			index = i
+			deleted = true
+		}
+	}
+	if !deleted {
+		return fmt.Errorf("produto %d não encontrado", id)
+	}
+
+	pd = append(pd[:index], pd[index+1:]...)
+	if err := r.db.Write(pd); err != nil {
+		return err
+	}
 	return nil
 }
 
