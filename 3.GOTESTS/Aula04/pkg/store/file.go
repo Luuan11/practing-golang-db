@@ -10,6 +10,14 @@ type Store interface {
 	Write(data interface{}) error
 }
 
+func New(store Type, fileName string) Store {
+    switch store {
+    case FileType:
+        return &FileStore{fileName}
+    }
+    return nil
+}
+
 type Type string
 
 const (
