@@ -4,7 +4,7 @@
 
 ### Assuntos como:
 - GO Bases
-- GO WEB
+- GO Web
 - GO Test
 
 ![My Skills](https://skillicons.dev/icons?i=go)
