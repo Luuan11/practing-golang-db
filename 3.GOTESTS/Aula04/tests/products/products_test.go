@@ -20,7 +20,17 @@ import (
 
 func Test_UpdateProducts(t *testing.T) {
 	t.Run("Test_UpdateProducts_OK", func(t *testing.T) {
-		var response interface{}
+		var response web.Response
+		var dataStored products.Product
+
+		expectedResult := products.Product{
+			ID: 1,
+			Name: "Keyboard",
+			Category: "techalterado",
+			Count: 20,
+			Price: 10,
+		}
+
 		r := createServerProduct()
 
 		req, rr := createRequestTest(http.MethodPost, "/products/",
@@ -31,27 +41,15 @@ func Test_UpdateProducts(t *testing.T) {
 			"price": 10
 		  }`)
 
-		  
-		  r.ServeHTTP(rr, req)
-		  assert.Equal(t, http.StatusCreated, rr.Code)
-		  err := json.Unmarshal(rr.Body.Bytes(), &response)
-		  assert.Nil(t, err)
-		  
-		  var dataStored products.Product
-		  jsonData, err := json.Marshal(response)
-		  assert.Nil(t, err)
-		  
-		  fmt.Println("---")
-		  fmt.Println(dataStored)
-		  fmt.Println("---")
-
-		err = json.Unmarshal(jsonData, &dataStored)
+		r.ServeHTTP(rr, req)
+		assert.Equal(t, http.StatusCreated, rr.Code)
+		err := json.Unmarshal(rr.Body.Bytes(), &dataStored)
 		assert.Nil(t, err)
 
 		id := dataStored.ID
 
 		req, rr = createRequestTest(http.MethodPut, fmt.Sprintf("/products/%d", id),
-		`{
+			`{
 			"name": "Keyboard",
 			"category": "techalterado",
 			"count": 20,
@@ -65,7 +63,7 @@ func Test_UpdateProducts(t *testing.T) {
 		assert.Nil(t, err)
 
 		var pd products.Product
-		jsonData, err = json.Marshal(response)
+		jsonData, err := json.Marshal(response.Data)
 		assert.Nil(t, err)
 
 		err = json.Unmarshal(jsonData, &pd)
@@ -73,56 +71,50 @@ func Test_UpdateProducts(t *testing.T) {
 
 		req, rr = createRequestTest(http.MethodGet, fmt.Sprintf("/products/%d", id), "")
 		r.ServeHTTP(rr, req)
+
 		assert.Equal(t, http.StatusOK, rr.Code)
 
 		err = json.Unmarshal(rr.Body.Bytes(), &response)
 		assert.Nil(t, err)
 
-		var expectedResponse products.Product
-		jsonData, err = json.Marshal(response)
+		var result products.Product
+		jsonData, err = json.Marshal(response.Data)
 		assert.Nil(t, err)
 
-		err = json.Unmarshal(jsonData, &expectedResponse)
+		err = json.Unmarshal(jsonData, &result)
 		assert.Nil(t, err)
 
-		assert.Equal(t, expectedResponse, pd)
+		expectedResult.ID = result.ID
+		assert.Equal(t, expectedResult, result)
 	})
 }
 
-func Test_DeleteUsers(t *testing.T) {
-	t.Run("Test_UpdateUsers_OK", func(t *testing.T) {
-		var response web.Response
-
+func Test_DeleteProducts(t *testing.T) {
+	t.Run("Test_DeleteProducts_OK", func(t *testing.T) {
+	
 		r := createServerProduct()
 
 		req, rr := createRequestTest(http.MethodPost, "/products/",
-		`{
+			`{
 			"Name": "Keyboard",
 			"Category": "tech",
 			"Count": 20,
 			"Price": 10
 		  }`)
 
+		var result products.Product
 		r.ServeHTTP(rr, req)
 		assert.Equal(t, http.StatusCreated, rr.Code)
-		err := json.Unmarshal(rr.Body.Bytes(), &response)
+		err := json.Unmarshal(rr.Body.Bytes(), &result)
 		assert.Nil(t, err)
 
-		var dataStored products.Product
-		jsonData, err := json.Marshal(response.Data)
-		assert.Nil(t, err)
-
-		err = json.Unmarshal(jsonData, &dataStored)
-		assert.Nil(t, err)
-		id := dataStored.ID
+		id := result.ID
 
 		req, rr = createRequestTest(http.MethodDelete, fmt.Sprintf("/products/%d", id), "")
 		r.ServeHTTP(rr, req)
 		assert.Equal(t, http.StatusOK, rr.Code)
-
 		req, rr = createRequestTest(http.MethodGet, fmt.Sprintf("/products/%d", id), "")
 		r.ServeHTTP(rr, req)
-		fmt.Println(rr.Body.String())
 		assert.Equal(t, http.StatusNotFound, rr.Code)
 	})
 }
@@ -137,9 +129,10 @@ func createServerProduct() *gin.Engine {
 
 	pr := r.Group("/products")
 	pr.POST("/", p.Store())
-	pr.PUT("/:id", p.Update())
+	pr.PUT("/:productId", p.Update())
 	pr.GET("/", p.GetAll())
-	pr.DELETE("/:id", p.Delete())
+	pr.GET("/:productId", p.GetById())
+	pr.DELETE("/:productId", p.Delete())
 	return r
 }
 

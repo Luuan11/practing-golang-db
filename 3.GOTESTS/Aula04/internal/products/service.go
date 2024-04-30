@@ -1,11 +1,13 @@
 package products
 
-import(
+import (
+
 	"github.com/luuan11/middleProducts/internal/entities"
 )
 
 type Service interface {
 	GetAll() ([]entities.Product, error)
+	GetById(id int) (entities.Product, error)
 	Store(name, category string, count int, price float64) (entities.Product, error)
 	Update(id uint64, name, category string, count int, price float64) (entities.Product, error)
 	UpdateName(id uint64, name string) (entities.Product, error)
@@ -14,6 +16,14 @@ type Service interface {
 
 type service struct {
 	repository Repository
+}
+
+func (s *service) GetById(id int) (entities.Product, error) {
+	pd, err := s.repository.GetById(id)
+	if err != nil {
+		return entities.Product{}, err
+	}
+	return pd, nil
 }
 
 func (s *service) GetAll() ([]entities.Product, error) {

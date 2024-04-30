@@ -7,6 +7,7 @@ import (
 
 type Repository interface {
 	GetAll() ([]entities.Product, error)
+	GetById(id int) (entities.Product, error)
 	Store(name, category string, count int, price float64) (entities.Product, error)
 	Update(id uint64, name, category string, count int, price float64) (entities.Product, error)
 	UpdateName(id uint64, name string) (entities.Product, error)

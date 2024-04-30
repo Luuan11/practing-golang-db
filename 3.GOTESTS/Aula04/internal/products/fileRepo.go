@@ -27,6 +27,19 @@ func (r *FileRepository) GetAll() ([]entities.Product, error) {
 	return ps, nil
 }
 
+func (r *FileRepository) GetById(id int) (entities.Product, error) {
+	var pd []entities.Product
+	if err := r.db.Read(&pd); err != nil {
+		return entities.Product{}, err
+	}
+	for _, p := range pd {
+		if int(p.ID) == id {
+			return p, nil
+		}
+	}
+	return entities.Product{}, errors.New("not found")
+}
+
 func (r *FileRepository) Store(name, category string, count int, price float64) (entities.Product, error) {
 	p := entities.Product{
 		Name:     name,
@@ -68,6 +81,7 @@ func (r *FileRepository) Delete(id uint64) error {
 	}
 
 	for i := range pd {
+		
 		if pd[i].ID == id {
 			index = i
 			deleted = true
@@ -81,6 +95,7 @@ func (r *FileRepository) Delete(id uint64) error {
 	if err := r.db.Write(pd); err != nil {
 		return err
 	}
+	
 	return nil
 }
 

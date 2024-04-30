@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/luuan11/middleProducts/internal/products"
 	"github.com/gin-gonic/gin"
+	"github.com/luuan11/middleProducts/internal/products"
+	"github.com/luuan11/middleProducts/pkg/web"
 )
 
 type CreateRequestDto struct {
@@ -65,6 +66,25 @@ func (c *ProductHandler) GetAll() gin.HandlerFunc {
 	}
 }
 
+func (u *ProductHandler) GetById() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		id, err := strconv.ParseInt(ctx.Param("productId"), 10, 0)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, web.NewResponse(http.StatusBadRequest, nil, err.Error()))
+		}
+		p, err := u.service.GetById(int(id))
+		if err != nil {
+			if err.Error() == "not found" {
+				ctx.JSON(http.StatusNotFound, web.NewResponse(http.StatusNotFound, nil, err.Error()))
+				return
+			}
+			ctx.JSON(http.StatusInternalServerError, web.NewResponse(http.StatusInternalServerError, nil, err.Error()))
+			return
+		}
+		ctx.JSON(http.StatusOK, web.NewResponse(http.StatusOK, p, ""))
+	}
+}
+
 // StoreProducts godoc
 // @Summary Store products
 // @Tags Products
@@ -86,7 +106,6 @@ func (c *ProductHandler) Store() gin.HandlerFunc {
 		}
 
 		// quando chamamos a service, os dados já estarão tratados
-		fmt.Println(req.Name, req.Category, req.Count, req.Price)
 		p, err := c.service.Store(req.Name, req.Category, req.Count, req.Price)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
