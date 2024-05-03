@@ -2,10 +2,13 @@
 
 🚀 Praticando Golang com alguns exercicios práticos!
 
-### Assuntos como:
+### Assuntos em golang como:
 - GO Bases
 - GO Web
 - GO Test
+
+## Assuntos em DB como: 
+- Criação de tabelas
 
 ![My Skills](https://skillicons.dev/icons?i=go)
 
