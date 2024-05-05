@@ -10,6 +10,6 @@
 ## Assuntos em DB como: 
 - Criação de tabelas
 
-![My Skills](https://skillicons.dev/icons?i=go)
+![My Skills](https://skillicons.dev/icons?i=go,mysql)
 
 feito com 💜 by [Luan Fernando](https://www.linkedin.com/in/luan-fernando/).
