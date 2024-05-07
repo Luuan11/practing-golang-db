@@ -14,9 +14,12 @@ CREATE TABLE livro (
     AnoPublicacao INT 
 );
 
-CREATE TABLE livro (
-    ID_reserva INT PRIMARY KEY AUTO_INCREMENT,
-    DataReserva DATE NOT NULL ,
+CREATE TABLE aluguel (
+    ID_Aluguel INT PRIMARY KEY NOT NULL,
+    DataAluguel DATE NOT NULL ,
+    DataAluguel DATE NOT NULL,
+    DataDevolucao DATE NOT NULL,
+    ValorAluguel FLOAT NOT NULL,
     ID_pessoa INT NOT NULL ,
     ID_livro INT NOT NULL ,
     FOREIGN KEY (ID_pessoa) REFERENCES pessoa(ID_pessoa),
