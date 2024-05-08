@@ -11,6 +11,13 @@ SELECT s.title, MAX(se.number) from series s
   INNER JOIN seasons se ON (s.id = se.serie_id) GROUP BY s.title 
 
 -- Mostre o nome de todos os gêneros e o número total de filmes de cada um, desde que seja maior ou igual a 3.
-
+SELECT g.name, count(*) AS total_filmes FROM genres g
+    INNER JOIN movies m ON m.genre_id = g.id
+    GROUP BY g.name
+    HAVING count (*) >= 3;
 
 -- Mostre apenas o nome e sobrenome dos atores que atuam em todos os filmes de Star Wars e que estes não se repitam.
+SELECT DISTINCT a.first_name, a.last_name FROM actors a
+	INNER JOIN actor_movie am ON (am.actor_id = a.id)
+	INNER JOIN movies m ON (m.id = am.movie_id)
+	WHERE m.title LIKE '%La Guerra de las galaxias%'
